@@ -24,7 +24,7 @@ public class Lab4 {
 
             printTop20();
         } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -68,7 +68,6 @@ public class Lab4 {
 
     private static void updatePageRanks() {
         int N = nodes.size();
-        double total = 0.0;
 
         for (int node : nodes) {
             double rank = 0.0;
@@ -80,7 +79,8 @@ public class Lab4 {
             }
             pageRankNew.put(node, ((1.0 - d) / N) + (d * rank));
         }
-        
+
+        double total = 0.0;
         for (double pr : pageRankNew.values()) {
             total += pr;
         }
