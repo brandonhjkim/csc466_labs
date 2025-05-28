@@ -19,7 +19,8 @@ public class Lab4 {
                 updatePageRanks();
                 distance = findDistance(pageRankOld, pageRankNew);
                 pageRankOld = new HashMap<>(pageRankNew); 
-            } while (distance > 0.0000001);
+            } while (distance > 0.001);
+            updatePageRanks();
 
             printTop20();
         } catch (IOException e) {
