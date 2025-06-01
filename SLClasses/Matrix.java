@@ -91,4 +91,76 @@ public class Matrix {
         }
         return map;
     }
-} 
+
+    public ArrayList<Integer> findAllRows() {
+        ArrayList<Integer> rows = new ArrayList<>();
+        for (int i = 0; i < data.length; i++) {
+            rows.add(i);
+        }
+        return rows;
+    }
+
+    public int getCategoryAttribute() {
+        return data[0].length - 1;
+    }
+
+    public double findProb(int[] row, int category) {
+        int totalRows = data.length;
+        double lambda = 1.0 / totalRows;
+        double prob = 1.0;
+        int catAttr = getCategoryAttribute();
+        ArrayList<Integer> allRows = findAllRows();
+
+        int categoryCount = 0;
+        for (int[] datum : data) {
+            if (datum[catAttr] == category) categoryCount++;
+        }
+        double prior = ((double) categoryCount + lambda) / (totalRows + lambda * getNumCategories());
+
+        prob *= prior;
+
+        for (int i = 0; i < catAttr; i++) {
+            int matchCount = 0;
+            int attrVal = row[i];
+            for (int[] datum : data) {
+                if (datum[catAttr] == category && datum[i] == attrVal) {
+                    matchCount++;
+                }
+            }
+            int uniqueVals = findDifferentValues(i, allRows).size();
+            prob *= ((double) matchCount + lambda) / (categoryCount + lambda * uniqueVals);
+        }
+
+        return prob;
+    }
+
+    public int findCategory(int[] row) {
+        HashSet<Integer> categories = new HashSet<>();
+        int catAttr = getCategoryAttribute();
+        for (int[] datum : data) {
+            categories.add(datum[catAttr]);
+        }
+
+        double maxProb = -1;
+        int bestCategory = -1;
+
+        for (int category : categories) {
+            double p = findProb(row, category);
+            if (p > maxProb) {
+                maxProb = p;
+                bestCategory = category;
+            }
+        }
+
+        return bestCategory;
+    }
+
+    private int getNumCategories() {
+        HashSet<Integer> categories = new HashSet<>();
+        for (int[] datum : data) {
+            categories.add(datum[getCategoryAttribute()]);
+        }
+        return categories.size();
+    }
+
+}
