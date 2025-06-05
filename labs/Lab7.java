@@ -29,7 +29,7 @@ public class Lab7 {
                 list.add(row);
             }
         } catch (Exception e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
         return list.toArray(new int[0][]);
     }
